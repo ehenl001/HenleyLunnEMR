@@ -3,6 +3,6 @@ applications:
   memory: 256M
   instances: 1
   domain: mybluemix.net
-  name: cen4083-emr
-  host: cen4083-emr
+  name: HenleyLunnEMR
+  host: HenleyLunnEMR
   disk_quota: 1024M
