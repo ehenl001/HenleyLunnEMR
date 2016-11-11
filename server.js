@@ -2,7 +2,7 @@
 *Created:...................11/07/2016
 *Author:....................Emmanuel Henley
 *Author Contact:............ehenl001@fiu.edu
-*Last Edited:...............11/09/2016
+*Last Edited:...............11/11/2016
 *Last Edited by:............same as author
 *Last Edited by contact:....same as author
 *
@@ -16,13 +16,22 @@ var http = require('http');
 
 var host = "localhost";
 var port = 3030;
+var cloudant = {
+	url: "https://a39147b3-f95b-4e5d-8d0d-a9b7384280fb-bluemix.cloudant.com/_all_dbs"	
+};
 
 if (process.env.hasOwnProperty("VCAP_SERVICES")) {
   // Running on Bluemix. Parse out the port and host that we've been assigned.
   var env = JSON.parse(process.env.VCAP_SERVICES);
   var host = process.env.VCAP_APP_HOST;
   var port = process.env.VCAP_APP_PORT;	
+  
+  //Parse out Cloudant settings
+  cloudant = env['cloudantNoSQLDB'][0].credentials;
 }
+
+var nano = require('nano')(cloudant.url);
+var db = nano.db.use('user_login');
 
 //Set path to Jade template directory
 app.set('views', __dirname + '/views');
