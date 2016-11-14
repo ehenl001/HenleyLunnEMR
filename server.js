@@ -64,7 +64,7 @@ var client_secret = ssoConfig.credentials.secret;
 var authorization_url = ssoConfig.credentials.authorizationEndpointUrl;
 var token_url = ssoConfig.credentials.tokenEndpointUrl;
 var issuer_id = ssoConfig.credentials.issuerIdentifier;
-var callback_url = PUT_CALLBACK_URL_HERE;        
+var callback_url = /patientExamination;        
 
 var OpenIDConnectStrategy = require('passport-idaas-openidconnect').IDaaSOIDCStrategy;
 var Strategy = new OpenIDConnectStrategy({
@@ -96,6 +96,16 @@ function ensureAuthenticated(req, res, next) {
 		return next();
 	}
 }
+
+//for auth
+app.get('/auth/sso/callback',function(req,res,next) {               
+             var redirect_url = req.session.originalUrl;                
+             passport.authenticate('openidconnect', {
+                     successRedirect: redirect_url,                                
+                     failureRedirect: '/failure',                        
+          })(req,res,next);
+        });
+
 
 //Set path to Jade template directory
 app.set("views", __dirname + "/views");
