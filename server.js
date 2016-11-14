@@ -64,7 +64,7 @@ var client_secret = ssoConfig.credentials.secret;
 var authorization_url = ssoConfig.credentials.authorizationEndpointUrl;
 var token_url = ssoConfig.credentials.tokenEndpointUrl;
 var issuer_id = ssoConfig.credentials.issuerIdentifier;
-var callback_url = /patientExamination;        
+var callback_url = '/patientExamination';
 
 var OpenIDConnectStrategy = require('passport-idaas-openidconnect').IDaaSOIDCStrategy;
 var Strategy = new OpenIDConnectStrategy({
@@ -82,7 +82,7 @@ var Strategy = new OpenIDConnectStrategy({
 		profile.accessToken = accessToken;
 		profile.refreshToken = refreshToken;
 		done(null, profile);
-         	})
+         	});
 }); 
 
 passport.use(Strategy); 
@@ -98,7 +98,7 @@ function ensureAuthenticated(req, res, next) {
 }
 
 //for auth
-app.get('/auth/sso/callback',function(req,res,next) {               
+app.get('/patientExamination',function(req,res,next) {               
              var redirect_url = req.session.originalUrl;                
              passport.authenticate('openidconnect', {
                      successRedirect: redirect_url,                                
