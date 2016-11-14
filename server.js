@@ -34,6 +34,7 @@ if (process.env.hasOwnProperty("VCAP_SERVICES")) {
 var nano = require("nano")(cloudant.url);
 var db = nano.db.use("user_login");
 
+
 //Set path to Jade template directory
 app.set("views", __dirname + "/views");
 
