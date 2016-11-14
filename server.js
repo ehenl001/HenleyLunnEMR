@@ -35,14 +35,13 @@ var nano = require("nano")(cloudant.url);
 var db = nano.db.use("user_login");
 
 //variables for the sso
-var passport = require('passport'); 
-var cookieParser = require('cookie-parser');
-var session = require('express-session');
+var passport = require('passport');
+var OpenIDConnectStrategy = require('passport-idaas-openidconnect').IDaaSOIDCStrategy;  
 
 
 //for the sso
-app.use(cookieParser());
-app.use(session({resave: 'true', saveUninitialized: 'true' , secret: 'keyboard cat'}));
+app.use(express.cookieParser());
+app.use(express.session({ secret: 'keyboard cat' }));
 app.use(passport.initialize());
 app.use(passport.session()); 
 
@@ -64,7 +63,7 @@ var client_secret = ssoConfig.credentials.secret;
 var authorization_url = ssoConfig.credentials.authorizationEndpointUrl;
 var token_url = ssoConfig.credentials.tokenEndpointUrl;
 var issuer_id = ssoConfig.credentials.issuerIdentifier;
-var callback_url = '/patientExamination';
+var callback_url = '/';        
 
 var OpenIDConnectStrategy = require('passport-idaas-openidconnect').IDaaSOIDCStrategy;
 var Strategy = new OpenIDConnectStrategy({
@@ -77,12 +76,12 @@ var Strategy = new OpenIDConnectStrategy({
                  callbackURL : callback_url,
                  skipUserProfile: true,
                  issuer: issuer_id}, 
-	function(iss, sub, profile, accessToken, refreshToken, params, done)  {
-	         	process.nextTick(function() {
+	function (iss, sub, profile, accessToken, refreshToken, params, done){
+	         	process.nextTick(function (){
 		profile.accessToken = accessToken;
 		profile.refreshToken = refreshToken;
 		done(null, profile);
-         	});
+         	})
 }); 
 
 passport.use(Strategy); 
@@ -97,14 +96,12 @@ function ensureAuthenticated(req, res, next) {
 	}
 }
 
-//for auth
-app.get('/patientExamination',function(req,res,next) {               
-             var redirect_url = req.session.originalUrl;                
-             passport.authenticate('openidconnect', {
-                     successRedirect: redirect_url,                                
-                     failureRedirect: '/failure',                        
+app.get('/',function(req,res,next) {
+            passport.authenticate('openidconnect',{
+                 successRedirect: '/patientExamination',                            
+                 failureRedirect: '/failure',                        
           })(req,res,next);
-        });
+                 });
 
 
 //Set path to Jade template directory
