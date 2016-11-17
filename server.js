@@ -90,7 +90,7 @@ app.get("/login", passport.authenticate("openidconnect", {}));
 function ensureAuthenticated(req, res, next) {
 	if(!req.isAuthenticated()) {
 	          	req.session.originalUrl = req.originalUrl;
-		res.redirect("/login");
+		res.redirect("/");//changed from login
 	} else {
 		return next();
 	}
