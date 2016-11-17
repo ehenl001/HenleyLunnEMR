@@ -122,7 +122,7 @@ app.set("images", __dirname + "/images");
 //Set path to static files
 app.use(express.static(__dirname + "/public"));
 
-//Bind the root '/' URL to the login page
+//Bind the root '/' URL to the home page
 app.get("/", function(req, res){
 	res.render("index.jade", {title: "Home Page"});
 });
