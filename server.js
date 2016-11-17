@@ -1,4 +1,4 @@
-/*eslint-env node */
+/*eslint-env node, express, nano*/
 /** 
 *Created:...................11/07/2016
 *Author:....................Emmanuel Henley
@@ -35,13 +35,13 @@ var nano = require("nano")(cloudant.url);
 var db = nano.db.use("user_login");
 
 //variables for the sso
-var passport = require('passport');
-var OpenIDConnectStrategy = require('passport-idaas-openidconnect').IDaaSOIDCStrategy;  
+var passport = require("passport");
+var OpenIDConnectStrategy = require("passport-idaas-openidconnect").IDaaSOIDCStrategy;  
 
 
 //for the sso
 app.use(express.cookieParser());
-app.use(express.session({ secret: 'keyboard cat' }));
+app.use(express.session({ secret: "keyboard cat" }));
 app.use(passport.initialize());
 app.use(passport.session()); 
 
@@ -63,15 +63,15 @@ var client_secret = ssoConfig.credentials.secret;
 var authorization_url = ssoConfig.credentials.authorizationEndpointUrl;
 var token_url = ssoConfig.credentials.tokenEndpointUrl;
 var issuer_id = ssoConfig.credentials.issuerIdentifier;
-var callback_url = 'https://cen4083-emr.mybluemix.net/auth/sso/callback';        
+var callback_url = "https://cen4083-emr.mybluemix.net/auth/sso/callback";        
 
-var OpenIDConnectStrategy = require('passport-idaas-openidconnect').IDaaSOIDCStrategy;
+var OpenIDConnectStrategy = require("passport-idaas-openidconnect").IDaaSOIDCStrategy;
 var Strategy = new OpenIDConnectStrategy({
                  authorizationURL : authorization_url,
                  tokenURL : token_url,
                  clientID : client_id,
-                 scope: 'openid',
-                 response_type: 'code',
+                 scope: "openid",
+                 response_type: "code",
                  clientSecret : client_secret,
                  callbackURL : callback_url,
                  skipUserProfile: true,
@@ -85,22 +85,22 @@ var Strategy = new OpenIDConnectStrategy({
 }); 
 
 passport.use(Strategy); 
-app.get('/login', passport.authenticate('openidconnect', {})); 
+app.get("/login", passport.authenticate("openidconnect", {})); 
           
 function ensureAuthenticated(req, res, next) {
 	if(!req.isAuthenticated()) {
 	          	req.session.originalUrl = req.originalUrl;
-		res.redirect('/login');
+		res.redirect("/login");
 	} else {
 		return next();
 	}
 }
 
-app.get('/auth/sso/callback',function(req,res,next) {
+app.get("/auth/sso/callback",function(req,res,next) {
 	    var redirect_url = req.session.originalUrl;
-            passport.authenticate('openidconnect',{
+            passport.authenticate("openidconnect",{
                  successRedirect: redirect_url,
-                 failureRedirect: '/failure',
+                 failureRedirect: "/failure",
           })(req,res,next);
         });
 
