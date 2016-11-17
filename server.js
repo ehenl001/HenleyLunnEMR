@@ -63,7 +63,7 @@ var client_secret = ssoConfig.credentials.secret;
 var authorization_url = ssoConfig.credentials.authorizationEndpointUrl;
 var token_url = ssoConfig.credentials.tokenEndpointUrl;
 var issuer_id = ssoConfig.credentials.issuerIdentifier;
-var callback_url = '/';        
+var callback_url = 'https://cen4083-emr.mybluemix.net/auth/sso/callback';        
 
 var OpenIDConnectStrategy = require('passport-idaas-openidconnect').IDaaSOIDCStrategy;
 var Strategy = new OpenIDConnectStrategy({
@@ -96,13 +96,13 @@ function ensureAuthenticated(req, res, next) {
 	}
 }
 
-app.get('/',function(req,res,next) {
+app.get('/auth/sso/callback',function(req,res,next) {
+	    var redirect_url = req.session.originalUrl;
             passport.authenticate('openidconnect',{
-                 successRedirect: '/patientExamination',                            
-                 failureRedirect: '/failure',                        
+                 successRedirect: redirect_url,
+                 failureRedirect: '/failure',
           })(req,res,next);
-                 });
-
+        });
 
 //Set path to Jade template directory
 app.set("views", __dirname + "/views");
@@ -124,7 +124,7 @@ app.use(express.static(__dirname + "/public"));
 
 //Bind the root '/' URL to the login page
 app.get("/", function(req, res){
-	res.render("login.jade", {title: "Login"});
+	res.render("index.jade", {title: "Home Page"});
 });
 
 //Bind the '/patientExamination' URL to the drview page
