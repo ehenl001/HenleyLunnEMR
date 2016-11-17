@@ -90,14 +90,14 @@ app.get("/login", passport.authenticate("openidconnect", {}));
 function ensureAuthenticated(req, res, next) {
 	if(!req.isAuthenticated()) {
 	          	req.session.originalUrl = req.originalUrl;
-		res.redirect("/");//changed from login
+		res.redirect("/login");
 	} else {
 		return next();
 	}
 }
 
 app.get("/auth/sso/callback",function(req,res,next) {
-	    var redirect_url = req.session.originalUrl;
+	    var redirect_url = "/";
             passport.authenticate("openidconnect",{
                  successRedirect: redirect_url,
                  failureRedirect: "/failure",
