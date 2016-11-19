@@ -81,7 +81,7 @@ var Strategy = new OpenIDConnectStrategy({
 		profile.accessToken = accessToken;
 		profile.refreshToken = refreshToken;
 		done(null, profile);
-         	})
+         	});
 }); 
 
 passport.use(Strategy); 
