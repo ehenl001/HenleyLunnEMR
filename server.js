@@ -97,7 +97,7 @@ function ensureAuthenticated(req, res, next) {
 }
 
 app.get("/auth/sso/callback",function(req,res,next) {
-	    var redirect_url = req.session.originalUrl;
+	    var redirect_url = "/";
             passport.authenticate("openidconnect",{
                  successRedirect: redirect_url,
                  failureRedirect: "/failure",
